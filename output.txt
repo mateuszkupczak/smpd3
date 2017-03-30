@@ -1,0 +1,92 @@
+> library(ahp)
+> ahpFile <- system.file("extdata/custom", "fridge.ahp", package="ahp")
+> fridgeAhp <- Load(ahpFile)
+> Calculate(fridgeAhp)
+> print(fridgeAhp, priority = function(x) x$sparent$priority["total", x$name])
+                                     levelName priority
+1  Buy Fridge                                        NA
+2   ¦--Performance                                   NA
+3   ¦   ¦--Samsung Chef Collection RB41J7839S4       NA
+4   ¦   ¦--Samsung RB37J5925SS                       NA
+5   ¦   ¦--Indesit LR6 S1 S                          NA
+6   ¦   ¦--Samsung RB29FSRNDSA                       NA
+7   ¦   ¦--Samsung RB31FERNCSA                       NA
+8   ¦   ¦--Indesit LR8 S2 X B                        NA
+9   ¦   ¦--Samsung RB29FERNCSS                       NA
+10  ¦   ¦--Bosch KGN39KL35                           NA
+11  ¦   ¦--Samsung RB31FERNBSS                       NA
+12  ¦   ¦--Samsung RB34K6032SS                       NA
+13  ¦   ¦--Amica FK205.4                             NA
+14  ¦   ¦--Samsung RB31FDRNDSA                       NA
+15  ¦   ¦--Samsung RB31FERNDBC                       NA
+16  ¦   ¦--Samsung RS7528THCSP                       NA
+17  ¦   °--Amica FK261.3XAA                          NA
+18  ¦--Quality                                       NA
+19  ¦   ¦--Samsung Chef Collection RB41J7839S4       NA
+20  ¦   ¦--Samsung RB37J5925SS                       NA
+21  ¦   ¦--Indesit LR6 S1 S                          NA
+22  ¦   ¦--Samsung RB29FSRNDSA                       NA
+23  ¦   ¦--Samsung RB31FERNCSA                       NA
+24  ¦   ¦--Indesit LR8 S2 X B                        NA
+25  ¦   ¦--Samsung RB29FERNCSS                       NA
+26  ¦   ¦--Bosch KGN39KL35                           NA
+27  ¦   ¦--Samsung RB31FERNBSS                       NA
+28  ¦   ¦--Samsung RB34K6032SS                       NA
+29  ¦   ¦--Amica FK205.4                             NA
+30  ¦   ¦--Samsung RB31FDRNDSA                       NA
+31  ¦   ¦--Samsung RB31FERNDBC                       NA
+32  ¦   ¦--Samsung RS7528THCSP                       NA
+33  ¦   °--Amica FK261.3XAA                          NA
+34  ¦--Style                                         NA
+35  ¦   ¦--Samsung Chef Collection RB41J7839S4       NA
+36  ¦   ¦--Samsung RB37J5925SS                       NA
+37  ¦   ¦--Indesit LR6 S1 S                          NA
+38  ¦   ¦--Samsung RB29FSRNDSA                       NA
+39  ¦   ¦--Samsung RB31FERNCSA                       NA
+40  ¦   ¦--Indesit LR8 S2 X B                        NA
+41  ¦   ¦--Samsung RB29FERNCSS                       NA
+42  ¦   ¦--Bosch KGN39KL35                           NA
+43  ¦   ¦--Samsung RB31FERNBSS                       NA
+44  ¦   ¦--Samsung RB34K6032SS                       NA
+45  ¦   ¦--Amica FK205.4                             NA
+46  ¦   ¦--Samsung RB31FDRNDSA                       NA
+47  ¦   ¦--Samsung RB31FERNDBC                       NA
+48  ¦   ¦--Samsung RS7528THCSP                       NA
+49  ¦   °--Amica FK261.3XAA                          NA
+50  °--Price                                         NA
+51      ¦--Samsung Chef Collection RB41J7839S4       NA
+52      ¦--Samsung RB37J5925SS                       NA
+53      ¦--Indesit LR6 S1 S                          NA
+54      ¦--Samsung RB29FSRNDSA                       NA
+55      ¦--Samsung RB31FERNCSA                       NA
+56      ¦--Indesit LR8 S2 X B                        NA
+57      ¦--Samsung RB29FERNCSS                       NA
+58      ¦--Bosch KGN39KL35                           NA
+59      ¦--Samsung RB31FERNBSS                       NA
+60      ¦--Samsung RB34K6032SS                       NA
+61      ¦--Amica FK205.4                             NA
+62      ¦--Samsung RB31FDRNDSA                       NA
+63      ¦--Samsung RB31FERNDBC                       NA
+64      ¦--Samsung RS7528THCSP                       NA
+65      °--Amica FK261.3XAA                          NA
+> Visualize(fridgeAhp)
+> Analyze(fridgeAhp)
+                  Weight Indesit LR6 S1 S Amica FK205.4 Indesit LR8 S2 X B Amica FK261.3XAA Samsung RB29FSRNDSA
+1 Buy Fridge      100.0%             9.6%          8.7%               8.1%             7.5%                7.4%
+2  ¦--Price        41.6%             5.0%          5.0%               3.7%             3.7%                3.2%
+3  ¦--Performance  31.0%             2.9%          2.1%               2.5%             2.0%                2.2%
+4  ¦--Quality      23.2%             1.5%          1.5%               1.5%             1.5%                1.5%
+5  °--Style         4.1%             0.2%          0.1%               0.3%             0.3%                0.4%
+  Samsung RB31FERNCSA Samsung RB31FERNBSS Samsung RB29FERNCSS Samsung RB31FDRNDSA Samsung RB31FERNDBC Bosch KGN39KL35
+1                6.8%                6.6%                6.6%                6.2%                6.0%            5.8%
+2                2.5%                2.0%                2.6%                2.3%                2.5%            2.2%
+3                2.5%                2.5%                2.1%                2.1%                1.9%            1.7%
+4                1.5%                1.5%                1.5%                1.5%                1.5%            1.5%
+5                0.3%                0.6%                0.4%                0.2%                0.1%            0.3%
+  Samsung RB37J5925SS Samsung RB34K6032SS Samsung Chef Collection RB41J7839S4 Samsung RS7528THCSP Inconsistency
+1                5.8%                5.5%                                5.1%                4.3%         18.1%
+2                2.1%                2.1%                                1.3%                1.3%          0.0%
+3                1.9%                1.7%                                1.8%                1.3%            NA
+4                1.5%                1.5%                                1.5%                1.5%          0.0%
+5                0.2%                0.2%                                0.5%                0.2%         59.5%
+> AnalyzeTable(fridgeAhp)

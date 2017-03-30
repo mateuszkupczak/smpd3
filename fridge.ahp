@@ -1,0 +1,304 @@
+Version: 2.0
+
+#########################
+# Alternatives Section
+#
+
+Alternatives: &alternatives
+# Here, we list all the alternatives, together with their attributes. 
+# We can use these attributes later in the file when defining 
+# preferenceFunctions. The attributes can be quantitative or 
+# qualitative.
+  Samsung Chef Collection RB41J7839S4:
+    cooler_storage_volume: 276
+    freezer_storage_volume: 130
+    price: 3399
+    colour: Silver Paint
+    hours_of_keeping_the_temperature_in_case_of_power_failure: 17
+    rapid_cooling: Yes
+    rapid_freezing: Yes
+  Samsung RB37J5925SS:
+    cooler_storage_volume: 262
+    freezer_storage_volume: 98
+    price: 2099
+    colour: Silver Paint
+    hours_of_keeping_the_temperature_in_case_of_power_failure: 18
+    rapid_cooling: No
+    rapid_freezing: Yes
+  Indesit LR6 S1 S:
+    cooler_storage_volume: 196
+    freezer_storage_volume: 75
+    price: 899
+    colour: Silver
+    hours_of_keeping_the_temperature_in_case_of_power_failure: 28
+    rapid_cooling: No
+    rapid_freezing: No
+  Samsung RB29FSRNDSA:
+    cooler_storage_volume: 192
+    freezer_storage_volume: 98
+    price: 1399
+    colour: Metallic Graphite
+    hours_of_keeping_the_temperature_in_case_of_power_failure: 21
+    rapid_cooling: No
+    rapid_freezing: Yes
+  Samsung RB31FERNCSA:
+    cooler_storage_volume: 206
+    freezer_storage_volume: 98
+    price: 1799
+    colour: Metallic Graphite
+    hours_of_keeping_the_temperature_in_case_of_power_failure: 24
+    rapid_cooling: No
+    rapid_freezing: Yes
+  Indesit LR8 S2 X B:
+    cooler_storage_volume: 228
+    freezer_storage_volume: 111
+    price: 1199
+    colour: Grey
+    hours_of_keeping_the_temperature_in_case_of_power_failure: 24
+    rapid_cooling: No
+    rapid_freezing: No
+  Samsung RB29FERNCSS:
+    cooler_storage_volume: 188
+    freezer_storage_volume: 98
+    price: 1699
+    colour: Silver Paint
+    hours_of_keeping_the_temperature_in_case_of_power_failure: 20
+    rapid_cooling: No
+    rapid_freezing: Yes
+  Bosch KGN39KL35:
+    cooler_storage_volume: 279
+    freezer_storage_volume: 87
+    price: 1999
+    colour: Silver
+    hours_of_keeping_the_temperature_in_case_of_power_failure: 16
+    rapid_cooling: Yes
+    rapid_freezing: Yes
+  Samsung RB31FERNBSS:
+    cooler_storage_volume: 206
+    freezer_storage_volume: 98
+    price: 2199
+    colour: Silver Paint
+    hours_of_keeping_the_temperature_in_case_of_power_failure: 24
+    rapid_cooling: No
+    rapid_freezing: Yes
+  Samsung RB34K6032SS:
+    cooler_storage_volume: 246
+    freezer_storage_volume: 98
+    price: 2099
+    colour: Silver Paint
+    hours_of_keeping_the_temperature_in_case_of_power_failure: 16
+    rapid_cooling: Yes
+    rapid_freezing: Yes
+  Amica FK205.4:
+    cooler_storage_volume: 100
+    freezer_storage_volume: 56
+    price: 890
+    colour: White
+    hours_of_keeping_the_temperature_in_case_of_power_failure: 20
+    rapid_cooling: No
+    rapid_freezing: No
+  Samsung RB31FDRNDSA:
+    cooler_storage_volume: 210
+    freezer_storage_volume: 98
+    price: 1899
+    colour: Metallic Graphite
+    hours_of_keeping_the_temperature_in_case_of_power_failure: 20
+    rapid_cooling: No
+    rapid_freezing: Yes
+  Samsung RB31FERNDBC:
+    cooler_storage_volume: 212
+    freezer_storage_volume: 98
+    price: 1799
+    colour: Black
+    hours_of_keeping_the_temperature_in_case_of_power_failure: 18
+    rapid_cooling: No
+    rapid_freezing: Yes
+  Samsung RS7528THCSP:
+    cooler_storage_volume: 361
+    freezer_storage_volume: 211
+    price: 3449
+    colour: Platinum Inox
+    hours_of_keeping_the_temperature_in_case_of_power_failure: 12
+    rapid_cooling: Yes
+    rapid_freezing: Yes
+  Amica FK261.3XAA:
+    cooler_storage_volume: 166
+    freezer_storage_volume: 64
+    price: 1198
+    colour: Grey
+    hours_of_keeping_the_temperature_in_case_of_power_failure: 19
+    rapid_cooling: No
+    rapid_freezing: No
+
+#
+# End of Alternatives Section
+#####################################
+
+#####################################
+# Goal Section
+#
+
+
+Goal:
+# The goal spans a tree of criteria and the alternatives
+  name: Buy Fridge
+  description: >
+    This is a classic single decision maker problem. It models
+    the situation facing by a family that wants to buy a new fridge.
+  author: Mateusz Kupczak
+  preferences:
+    # preferences are typically defined pairwise
+    # 1 means: A is equal to B
+    # 9 means: A is highly preferrable to B
+    # 1/9 means: B is highly preferrable to A
+    pairwise:
+      - [Performance, Quality, 3]
+      - [Performance, Style, 6]
+      - [Performance, Price, 1/3]
+      - [Quality, Style, 7]
+      - [Quality, Price, 1]
+      - [Style, Price, 1/7]
+  children: 
+    Performance: 
+      preferences:
+        # KOMENTARZ: Ocena wydajnoœci na podstawie iloœci godzin utrzymania temperatury w przypadku braku zasilania
+        scoreFunction:
+            function(a) a$hours_of_keeping_the_temperature_in_case_of_power_failure
+      children: *alternatives
+    Quality: 
+      preferences:
+        # KOMENTARZ: Ocena jakoœci na podstawie, czy lodówka ma szybkie ch³odzenie/zamra¿anie
+        pairwiseFunction: >
+          QualityPreference <- function(a1, a2) {
+            if (a1$rapid_cooling == "No" & a1$rapid_freezing == "No") qualityscorea1 <- 1
+            else if (a1$rapid_cooling == "No" & a1$rapid_freezing == "Yes") qualityscorea1 <- 4
+            else if (a1$rapid_cooling == "Yes" & a1$rapid_freezing == "No") qualityscorea1 <- 6
+            else qualityscorea1 <- 9
+            if (a2$rapid_cooling == "No" & a2$rapid_freezing == "No") qualityscorea2 <- 1
+            else if (a2$rapid_cooling == "No" & a2$rapid_freezing == "Yes") qualityscorea2 <- 4
+            else if (a2$rapid_cooling == "Yes" & a2$rapid_freezing == "No") qualityscorea2 <- 6
+            else qualityscorea2 <- 9
+            if (qualityscorea1 < qualityscorea2) return (qualityscorea2/qualityscorea1)
+            return (qualityscorea1/qualityscorea2)
+          }
+      children: *alternatives
+    Style: 
+      preferences:
+        # KOMENTARZ: Macierz oceny stylu na podstawie porównania dokonanego rêcznie przez klienta poszczególnych par lodówek (nigdy nie bêdzie to w 100% dok³adne)
+        pairwise:
+          - [Samsung Chef Collection RB41J7839S4, Samsung RB37J5925SS, 9]
+          - [Samsung Chef Collection RB41J7839S4, Indesit LR6 S1 S, 7]
+          - [Samsung Chef Collection RB41J7839S4, Samsung RB29FSRNDSA, 1]
+          - [Samsung Chef Collection RB41J7839S4, Samsung RB31FERNCSA, 5]
+          - [Samsung Chef Collection RB41J7839S4, Indesit LR8 S2 X B, 5]
+          - [Samsung Chef Collection RB41J7839S4, Samsung RB29FERNCSS, 1/3]
+          - [Samsung Chef Collection RB41J7839S4, Bosch KGN39KL35, 3]
+          - [Samsung Chef Collection RB41J7839S4, Samsung RB31FERNBSS, 1/3]
+          - [Samsung Chef Collection RB41J7839S4, Samsung RB34K6032SS, 1/2]
+          - [Samsung Chef Collection RB41J7839S4, Amica FK205.4, 3]
+          - [Samsung Chef Collection RB41J7839S4, Samsung RB31FDRNDSA, 3]
+          - [Samsung Chef Collection RB41J7839S4, Samsung RB31FERNDBC, 7]
+          - [Samsung Chef Collection RB41J7839S4, Samsung RS7528THCSP, 3]
+          - [Samsung Chef Collection RB41J7839S4, Amica FK261.3XAA, 2]
+          - [Samsung RB37J5925SS, Indesit LR6 S1 S, 1/2]
+          - [Samsung RB37J5925SS, Samsung RB29FSRNDSA, 1/4]
+          - [Samsung RB37J5925SS, Samsung RB31FERNCSA, 1/2]
+          - [Samsung RB37J5925SS, Indesit LR8 S2 X B, 1/3]
+          - [Samsung RB37J5925SS, Samsung RB29FERNCSS, 6]
+          - [Samsung RB37J5925SS, Bosch KGN39KL35, 1/4]
+          - [Samsung RB37J5925SS, Samsung RB31FERNBSS, 2]
+          - [Samsung RB37J5925SS, Samsung RB34K6032SS, 1/3]
+          - [Samsung RB37J5925SS, Amica FK205.4, 1]
+          - [Samsung RB37J5925SS, Samsung RB31FDRNDSA, 1]
+          - [Samsung RB37J5925SS, Samsung RB31FERNDBC, 1]
+          - [Samsung RB37J5925SS, Samsung RS7528THCSP, 1/3]
+          - [Samsung RB37J5925SS, Amica FK261.3XAA, 1/2]
+          - [Indesit LR6 S1 S, Samsung RB29FSRNDSA, 1/6]
+          - [Indesit LR6 S1 S, Samsung RB31FERNCSA, 2]
+          - [Indesit LR6 S1 S, Indesit LR8 S2 X B, 1]
+          - [Indesit LR6 S1 S, Samsung RB29FERNCSS, 1]
+          - [Indesit LR6 S1 S, Bosch KGN39KL35, 1/2]
+          - [Indesit LR6 S1 S, Samsung RB31FERNBSS, 1/2]
+          - [Indesit LR6 S1 S, Samsung RB34K6032SS, 2]
+          - [Indesit LR6 S1 S, Amica FK205.4, 3]
+          - [Indesit LR6 S1 S, Samsung RB31FDRNDSA, 1]
+          - [Indesit LR6 S1 S, Samsung RB31FERNDBC, 2]
+          - [Indesit LR6 S1 S, Samsung RS7528THCSP, 3]
+          - [Indesit LR6 S1 S, Amica FK261.3XAA, 1]
+          - [Samsung RB29FSRNDSA, Samsung RB31FERNCSA, 6]
+          - [Samsung RB29FSRNDSA, Indesit LR8 S2 X B, 2]
+          - [Samsung RB29FSRNDSA, Samsung RB29FERNCSS, 3]
+          - [Samsung RB29FSRNDSA, Bosch KGN39KL35, 2]
+          - [Samsung RB29FSRNDSA, Samsung RB31FERNBSS, 1]
+          - [Samsung RB29FSRNDSA, Samsung RB34K6032SS, 3]
+          - [Samsung RB29FSRNDSA, Amica FK205.4, 3]
+          - [Samsung RB29FSRNDSA, Samsung RB31FDRNDSA, 3]
+          - [Samsung RB29FSRNDSA, Samsung RB31FERNDBC, 3]
+          - [Samsung RB29FSRNDSA, Samsung RS7528THCSP, 4]
+          - [Samsung RB29FSRNDSA, Amica FK261.3XAA, 2]
+          - [Samsung RB31FERNCSA, Indesit LR8 S2 X B, 2]
+          - [Samsung RB31FERNCSA, Samsung RB29FERNCSS, 1]
+          - [Samsung RB31FERNCSA, Bosch KGN39KL35, 1/4]
+          - [Samsung RB31FERNCSA, Samsung RB31FERNBSS, 1]
+          - [Samsung RB31FERNCSA, Samsung RB34K6032SS, 2]
+          - [Samsung RB31FERNCSA, Amica FK205.4, 1]
+          - [Samsung RB31FERNCSA, Samsung RB31FDRNDSA, 2]
+          - [Samsung RB31FERNCSA, Samsung RB31FERNDBC, 2]
+          - [Samsung RB31FERNCSA, Samsung RS7528THCSP, 4]
+          - [Samsung RB31FERNCSA, Amica FK261.3XAA, 7]
+          - [Indesit LR8 S2 X B, Samsung RB29FERNCSS, 7]
+          - [Indesit LR8 S2 X B, Bosch KGN39KL35, 1]
+          - [Indesit LR8 S2 X B, Samsung RB31FERNBSS, 1/5]
+          - [Indesit LR8 S2 X B, Samsung RB34K6032SS, 7]
+          - [Indesit LR8 S2 X B, Amica FK205.4, 7]
+          - [Indesit LR8 S2 X B, Samsung RB31FDRNDSA, 1/3]
+          - [Indesit LR8 S2 X B, Samsung RB31FERNDBC, 2]
+          - [Indesit LR8 S2 X B, Samsung RS7528THCSP, 8]
+          - [Indesit LR8 S2 X B, Amica FK261.3XAA, 1/8]
+          - [Samsung RB29FERNCSS, Bosch KGN39KL35, 2]
+          - [Samsung RB29FERNCSS, Samsung RB31FERNBSS, 1/8]
+          - [Samsung RB29FERNCSS, Samsung RB34K6032SS, 5]
+          - [Samsung RB29FERNCSS, Amica FK205.4, 1]
+          - [Samsung RB29FERNCSS, Samsung RB31FDRNDSA, 7]
+          - [Samsung RB29FERNCSS, Samsung RB31FERNDBC, 5]
+          - [Samsung RB29FERNCSS, Samsung RS7528THCSP, 6]
+          - [Samsung RB29FERNCSS, Amica FK261.3XAA, 6]
+          - [Bosch KGN39KL35, Samsung RB31FERNBSS, 1/7]
+          - [Bosch KGN39KL35, Samsung RB34K6032SS, 5]
+          - [Bosch KGN39KL35, Amica FK205.4, 9]
+          - [Bosch KGN39KL35, Samsung RB31FDRNDSA, 6]
+          - [Bosch KGN39KL35, Samsung RB31FERNDBC, 6]
+          - [Bosch KGN39KL35, Samsung RS7528THCSP, 1/3]
+          - [Bosch KGN39KL35, Amica FK261.3XAA, 3]
+          - [Samsung RB31FERNBSS, Samsung RB34K6032SS, 7]
+          - [Samsung RB31FERNBSS, Amica FK205.4, 5]
+          - [Samsung RB31FERNBSS, Samsung RB31FDRNDSA, 5]
+          - [Samsung RB31FERNBSS, Samsung RB31FERNDBC, 1]
+          - [Samsung RB31FERNBSS, Samsung RS7528THCSP, 1/2]
+          - [Samsung RB31FERNBSS, Amica FK261.3XAA, 1]
+          - [Samsung RB34K6032SS, Amica FK205.4, 3]
+          - [Samsung RB34K6032SS, Samsung RB31FDRNDSA, 1/2]
+          - [Samsung RB34K6032SS, Samsung RB31FERNDBC, 1/2]
+          - [Samsung RB34K6032SS, Samsung RS7528THCSP, 1]
+          - [Samsung RB34K6032SS, Amica FK261.3XAA, 2]
+          - [Amica FK205.4, Samsung RB31FDRNDSA, 1/2]
+          - [Amica FK205.4, Samsung RB31FERNDBC, 1]
+          - [Amica FK205.4, Samsung RS7528THCSP, 3]
+          - [Amica FK205.4, Amica FK261.3XAA, 1/2]
+          - [Samsung RB31FDRNDSA, Samsung RB31FERNDBC, 2]
+          - [Samsung RB31FDRNDSA, Samsung RS7528THCSP, 6]
+          - [Samsung RB31FDRNDSA, Amica FK261.3XAA, 1]
+          - [Samsung RB31FERNDBC, Samsung RS7528THCSP, 3]
+          - [Samsung RB31FERNDBC, Amica FK261.3XAA, 1/2]
+          - [Samsung RS7528THCSP, Amica FK261.3XAA, 1/6]
+      children: *alternatives
+    Price: 
+      preferences:
+        # KOMENTARZ: Metoda porównywania cen lodówek w parach
+        pairwiseFunction: 
+            function(a1, a2) min(9, max(1/9, a2$price/a1$price))
+      children: *alternatives
+
+#
+# End of Goal Section
+#####################################

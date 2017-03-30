@@ -1,0 +1,8 @@
+library(ahp)
+ahpFile <- system.file("extdata/custom", "fridge.ahp", package="ahp")
+fridgeAhp <- Load(ahpFile)
+Calculate(fridgeAhp)
+print(fridgeAhp, priority = function(x) x$sparent$priority["total", x$name])
+Visualize(fridgeAhp)
+Analyze(fridgeAhp)
+AnalyzeTable(fridgeAhp)
